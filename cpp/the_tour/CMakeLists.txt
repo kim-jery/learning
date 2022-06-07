@@ -3,4 +3,5 @@ project(the_tour)
 
 set(CMAKE_CXX_STANDARD 23)
 
-add_executable(hello_world hello_world/hello_world.cpp)
+include(./hello_world/CMakeLists.txt)
+include(./raii/CMakeLists.txt)
