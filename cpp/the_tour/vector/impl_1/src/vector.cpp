@@ -1,6 +1,5 @@
 #include "./../include/vector.hpp"
 #include <algorithm>
-#include <iostream>
 #include <format>
 
 using namespace kjr::learning::vector_impl_1;
@@ -146,8 +145,6 @@ void vector::resize(int new_size)
 void vector::push_back(double value)
 {
     if (m_size == m_capacity) {
-        std::cout << "Vector has been resized due to push_back\n";
-
         resize((m_capacity + 1) * 2);
     }
 

@@ -1,19 +1,6 @@
 #include "./include/vector.hpp"
 #include <iostream>
 
-namespace kjr::learning::vector_impl_1 {
-
-void show_vec(vector const& vec)
-{
-    std::cout << "__________________\n";
-    for (double value : vec) {
-        std::cout << value << '\n';
-    }
-    std::cout << "__________________\n";
-}
-
-}
-
 int main()
 {
     std::ios_base::sync_with_stdio(false);
@@ -28,15 +15,23 @@ int main()
     doubles.push_back(10);
     doubles.push_back(20);
     doubles[4] = 3;
-    vec::show_vec(doubles);
+    std::cout << doubles;
     doubles.push_back(30);
-    vec::show_vec(doubles);
-    
+    std::cout << doubles;
+
     auto const doubles_2 {std::move(doubles)};
-    vec::show_vec(doubles_2);
+    std::cout << doubles_2;
     auto const doubles_3 {doubles_2};
 
     std::cout << std::boolalpha << (doubles_2 == doubles_3) << " ; Both vec should be equal\n";
+
+    int limit {0};
+    std::cout << "Number of input to set into the vector at runtime :";
+    std::cin >> limit;
+    std::cout << "\nEnter your inputs\n";
+    double_list double_from_is {};
+    kjr::learning::vector_impl_1::ask_for_inputs(double_from_is, limit);
+    std::cout << double_from_is;
 
     return 0;
 }

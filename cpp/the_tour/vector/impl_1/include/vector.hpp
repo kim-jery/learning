@@ -3,7 +3,7 @@
 #pragma once
 
 #include <initializer_list>
-#include <ostream>
+#include <iostream>
 
 namespace kjr::learning::vector_impl_1 {
 
@@ -11,8 +11,8 @@ class vector final
 {
 
 private:
-    int m_size {};
-    int m_capacity {};
+    int m_size {0};
+    int m_capacity {0};
     double* m_container {nullptr};
 
 public:
@@ -24,7 +24,7 @@ public:
     ~vector();
 
     vector& operator =(vector const&);
-    vector& operator =(vector&&) noexcept ;
+    vector& operator =(vector&&) noexcept;
     double& operator [](int);
     double operator [](int) const;
     bool operator ==(vector const&) const;
@@ -41,7 +41,12 @@ public:
 
 };
 
-}
+std::ostream& operator <<(std::ostream&, vector const&);
+std::istream& operator >>(std::istream&, vector&);
 
+void ask_for_inputs(vector&, int);
+
+
+}
 
 #endif //THE_TOUR_VECTOR_HPP
