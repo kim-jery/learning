@@ -1,8 +1,9 @@
 cmake_minimum_required(VERSION 3.22)
-project(the_tour)
+project(the_tour CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 
-include(./hello_world/CMakeLists.txt)
-include(./raii/CMakeLists.txt)
-include(./vector/CMakeLists.txt)
+add_subdirectory(./hello_world)
+add_subdirectory(./vector)
+add_subdirectory(./raii)
+add_subdirectory(./pointer)

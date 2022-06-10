@@ -21,16 +21,18 @@ int main()
 
     auto const doubles_2 {std::move(doubles)};
     std::cout << doubles_2;
-    auto const doubles_3 {doubles_2};
+    auto doubles_3 {doubles_2};
 
     std::cout << std::boolalpha << (doubles_2 == doubles_3) << " ; Both vec should be equal\n";
+    doubles_3.push_back(42);
+    std::cout << std::boolalpha << (doubles_2 == doubles_3) << " ; Both vec should not be equal\n";
 
     int limit {0};
     std::cout << "Number of input to set into the vector at runtime :";
     std::cin >> limit;
     std::cout << "\nEnter your inputs\n";
     double_list double_from_is {};
-    kjr::learning::vector_impl_1::ask_for_inputs(double_from_is, limit);
+    vec::ask_for_inputs(double_from_is, limit);
     std::cout << double_from_is;
 
     return 0;

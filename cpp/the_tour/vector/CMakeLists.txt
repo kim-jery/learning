@@ -1,1 +1,1 @@
-include(./vector/impl_1/CMakeLists.txt)
+add_subdirectory(./impl_1)

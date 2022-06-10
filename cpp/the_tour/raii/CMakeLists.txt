@@ -1,6 +1,12 @@
+add_library(
+    raii_lib
+    ./include/raii.hpp
+    ./src/raii.cpp
+)
+
 add_executable(
     raii
-    ./raii/raii.cpp
-    ./raii/include/raii.hpp
-    ./raii/src/raii.cpp
+    ./raii.cpp
 )
+
+target_link_libraries(raii raii_lib)

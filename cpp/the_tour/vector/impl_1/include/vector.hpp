@@ -1,5 +1,5 @@
-#ifndef THE_TOUR_VECTOR_HPP
-#define THE_TOUR_VECTOR_HPP
+#ifndef THE_TOUR_VECTOR_HPP_IMPL_1
+#define THE_TOUR_VECTOR_HPP_IMPL_1
 #pragma once
 
 #include <initializer_list>
@@ -23,8 +23,8 @@ public:
     vector (vector&&) noexcept;
     ~vector();
 
-    vector& operator =(vector const&);
-    vector& operator =(vector&&) noexcept;
+    vector& operator =(vector const&) = delete;
+    vector& operator =(vector&&) = delete;
     double& operator [](int);
     double operator [](int) const;
     bool operator ==(vector const&) const;
@@ -49,4 +49,4 @@ void ask_for_inputs(vector&, int);
 
 }
 
-#endif //THE_TOUR_VECTOR_HPP
+#endif //THE_TOUR_VECTOR_HPP_IMPL_1

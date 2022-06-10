@@ -1,15 +1,16 @@
 #include "./../include/vector.hpp"
+#include <algorithm>
 
 namespace impl_1 = kjr::learning::vector_impl_1;
 
 std::ostream& impl_1::operator <<(std::ostream& os, vector const& vector)
 {
-    os << "______________________________\n";
+    os << "\n______________________________\n";
     os << "Container Values\n";
-    for (double val : vector) {
-        std::cout << val << '\n';
-    }
-    os << "______________________________\n";
+    std::for_each(std::begin(vector), std::end(vector), [](double value) -> void {
+        std::cout << value << '-';
+    });
+    os << "\n______________________________\n";
 
     return os;
 }

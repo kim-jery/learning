@@ -2,9 +2,9 @@
 #include <algorithm>
 #include <format>
 
-using namespace kjr::learning::vector_impl_1;
+namespace impl_1 = kjr::learning::vector_impl_1;
 
-vector::vector(int size):
+impl_1::vector::vector(int size):
     m_size {size},
     m_capacity {size},
     m_container {new double[m_capacity]}
@@ -12,7 +12,7 @@ vector::vector(int size):
     std::fill(m_container, m_container + m_capacity, double{});
 }
 
-vector::vector(std::initializer_list<double> values):
+impl_1::vector::vector(std::initializer_list<double> values):
     m_size {static_cast<int>(values.size())},
     m_capacity {m_size},
     m_container {new double[m_size]}
@@ -20,7 +20,7 @@ vector::vector(std::initializer_list<double> values):
     std::copy(std::cbegin(values), std::cend(values), m_container);
 }
 
-vector::vector(vector const& vector):
+impl_1::vector::vector(vector const& vector):
     m_size {vector.m_size},
     m_capacity {vector.m_capacity},
     m_container {new double[m_capacity]}
@@ -30,7 +30,7 @@ vector::vector(vector const& vector):
     std::cout << std::format("Vector with {} elements has been copied", m_capacity) << " into " << this << '\n';
 }
 
-vector::vector(vector&& vector) noexcept:
+impl_1::vector::vector(vector&& vector) noexcept:
     m_size {vector.m_size},
     m_capacity {vector.m_capacity},
     m_container {vector.m_container}
@@ -42,49 +42,22 @@ vector::vector(vector&& vector) noexcept:
     std::cout << std::format("Vector with {} elements has been moved", m_capacity) << " into " << this << '\n';
 }
 
-vector::~vector()
+impl_1::vector::~vector()
 {
     delete[] m_container;
 }
 
-vector& vector::operator =(vector const& vector)
-{
-    if (&vector == this) {
-        return *this;
-    }
-
-    m_size = vector.m_size;
-    m_capacity = vector.m_capacity;
-    m_container = new double[m_capacity];
-    std::copy(vector.m_container, vector.m_container + m_capacity, m_container);
-
-    return *this;
-}
-
-vector& vector::operator =(vector&& vector) noexcept
-{
-    m_size = vector.m_size;
-    m_capacity = vector.m_capacity;
-    m_container = vector.m_container;
-
-    vector.m_size = 0;
-    vector.m_capacity = 0;
-    vector.m_container = nullptr;
-
-    return *this;
-}
-
-double& vector::operator[](int index)
+double& impl_1::vector::operator[](int index)
 {
     return m_container[index];
 }
 
-double vector::operator[](int index) const
+double impl_1::vector::operator[](int index) const
 {
     return m_container[index];
 }
 
-bool vector::operator==(const vector& vector) const
+bool impl_1::vector::operator==(const vector& vector) const
 {
     if (vector.size() != m_size || vector.m_capacity != m_capacity) {
         return false;
@@ -99,37 +72,37 @@ bool vector::operator==(const vector& vector) const
     return true;
 }
 
-double* vector::begin() const
+double* impl_1::vector::begin() const
 {
     return m_container;
 }
 
-double* vector::end() const
+double* impl_1::vector::end() const
 {
     return m_container + m_capacity;
 }
 
-double const* vector::cbegin() const
+double const* impl_1::vector::cbegin() const
 {
     return m_container;
 }
 
-double const* vector::cend() const
+double const* impl_1::vector::cend() const
 {
     return m_container + m_capacity;
 }
 
-int vector::size() const noexcept
+int impl_1::vector::size() const noexcept
 {
     return m_size;
 }
 
-int vector::capacity() const noexcept
+int impl_1::vector::capacity() const noexcept
 {
     return m_capacity;
 }
 
-void vector::resize(int new_size)
+void impl_1::vector::resize(int new_size)
 {
     double* new_container {new double[new_size]};
 
@@ -142,7 +115,7 @@ void vector::resize(int new_size)
     m_container = new_container;
 }
 
-void vector::push_back(double value)
+void impl_1::vector::push_back(double value)
 {
     if (m_size == m_capacity) {
         resize((m_capacity + 1) * 2);
