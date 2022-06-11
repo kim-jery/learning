@@ -8,7 +8,12 @@ add_library(
 
 add_executable(
     pointer
-    pointer.cpp
+    ./pointer.cpp
+)
+
+add_executable(
+    dangerous_pointer
+    ./dangerous_pointer.cpp
 )
 
 target_link_libraries(pointer PRIVATE class_with_shared_ptr_lib)
