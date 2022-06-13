@@ -13,6 +13,7 @@ class rectangle final : public shape
 
 public:
     void draw(std::ostream&) const override;
+
 };
 
 }

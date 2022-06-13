@@ -9,6 +9,9 @@ add_library(
 
     ./include/rectangle.h
     ./src/rectangle.cpp
+
+    ./include/triangle.h
+    ./src/triangle.cpp
 )
 
 add_executable(inheritance inheritance.cpp)
