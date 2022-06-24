@@ -1,4 +1,4 @@
-#include "./../include/rectangle.h"
+#include "./../include/rectangle.hpp"
 
 void kjr::learning::oop::inheritance::rectangle::draw(std::ostream& os) const
 {

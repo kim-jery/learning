@@ -1,5 +1,5 @@
-#ifndef THE_TOUR_ARRAY_H
-#define THE_TOUR_ARRAY_H
+#ifndef THE_TOUR_ARRAY_HPP
+#define THE_TOUR_ARRAY_HPP
 #pragma once
 
 #include <cstdint>
@@ -70,4 +70,4 @@ public:
 
 }
 
-#endif //THE_TOUR_ARRAY_H
+#endif //THE_TOUR_ARRAY_HPP

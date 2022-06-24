@@ -1,6 +1,6 @@
-#include "./include/square.h"
-#include "./include/rectangle.h"
-#include "./include/triangle.h"
+#include "./include/square.hpp"
+#include "./include/rectangle.hpp"
+#include "./include/triangle.hpp"
 #include <memory>
 #include <vector>
 #include <iostream>

@@ -1,8 +1,8 @@
-#ifndef THE_TOUR_SHAPE_H
-#define THE_TOUR_SHAPE_H
+#ifndef THE_TOUR_SHAPE_HPP
+#define THE_TOUR_SHAPE_HPP
 #pragma once
 
-#include "./xy_dim.h"
+#include "./xy_dim.hpp"
 #include <ostream>
 
 namespace kjr::learning::oop::inheritance {
@@ -28,4 +28,4 @@ public:
 
 }
 
-#endif //THE_TOUR_SHAPE_H
+#endif //THE_TOUR_SHAPE_HPP

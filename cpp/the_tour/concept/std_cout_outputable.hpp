@@ -1,5 +1,5 @@
-#ifndef THE_TOUR_STD_COUT_OUTPUTABLE_H
-#define THE_TOUR_STD_COUT_OUTPUTABLE_H
+#ifndef THE_TOUR_STD_COUT_OUTPUTABLE_HPP
+#define THE_TOUR_STD_COUT_OUTPUTABLE_HPP
 #pragma once
 
 #include <iostream>
@@ -26,4 +26,4 @@ void do_output_no_check(T&&... vals)
 
 }
 
-#endif //THE_TOUR_STD_COUT_OUTPUTABLE_H
+#endif //THE_TOUR_STD_COUT_OUTPUTABLE_HPP

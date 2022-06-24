@@ -1,8 +1,8 @@
-#ifndef THE_TOUR_RECTANGLE_H
-#define THE_TOUR_RECTANGLE_H
+#ifndef THE_TOUR_RECTANGLE_HPP
+#define THE_TOUR_RECTANGLE_HPP
 #pragma once
 
-#include "./shape.h"
+#include "./shape.hpp"
 
 namespace kjr::learning::oop::inheritance {
 
@@ -19,4 +19,4 @@ public:
 }
 
 
-#endif //THE_TOUR_RECTANGLE_H
+#endif //THE_TOUR_RECTANGLE_HPP

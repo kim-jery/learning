@@ -1,4 +1,4 @@
-#include "./../include/square.h"
+#include "./../include/square.hpp"
 
 void kjr::learning::oop::inheritance::square::draw(std::ostream& os) const
 {

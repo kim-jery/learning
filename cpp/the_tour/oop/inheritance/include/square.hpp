@@ -1,12 +1,12 @@
-#ifndef THE_TOUR_TRIANGLE_H
-#define THE_TOUR_TRIANGLE_H
+#ifndef THE_TOUR_SQUARE_HPP
+#define THE_TOUR_SQUARE_HPP
 #pragma once
 
-#include "./shape.h"
+#include "./shape.hpp"
 
 namespace kjr::learning::oop::inheritance {
 
-class triangle final : public shape
+class square final : public shape
 {
 
     using shape::shape;
@@ -18,5 +18,4 @@ public:
 
 }
 
-
-#endif //THE_TOUR_TRIANGLE_H
+#endif //THE_TOUR_SQUARE_HPP

@@ -1,6 +1,6 @@
 add_library(
     array_lib
-    ./include/array.h
+    include/array.hpp
     ./src/array.cpp
 )
 

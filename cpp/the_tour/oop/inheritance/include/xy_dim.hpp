@@ -1,5 +1,5 @@
-#ifndef THE_TOUR_XY_DIM_H
-#define THE_TOUR_XY_DIM_H
+#ifndef THE_TOUR_XY_DIM_HPP
+#define THE_TOUR_XY_DIM_HPP
 #pragma once
 
 namespace kjr::learning::oop::inheritance {
@@ -12,4 +12,4 @@ struct xy_dim final
 
 }
 
-#endif //THE_TOUR_XY_DIM_H
+#endif //THE_TOUR_XY_DIM_HPP

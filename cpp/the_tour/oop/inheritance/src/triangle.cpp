@@ -1,4 +1,4 @@
-#include "./../include/triangle.h"
+#include "./../include/triangle.hpp"
 
 void kjr::learning::oop::inheritance::triangle::draw(std::ostream& os) const
 {

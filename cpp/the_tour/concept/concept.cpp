@@ -1,4 +1,4 @@
-#include "./std_cout_outputable.h"
+#include "./std_cout_outputable.hpp"
 #include <string>
 #include <string_view>
 

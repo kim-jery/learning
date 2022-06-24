@@ -1,16 +1,16 @@
 add_library(
     shape
-    include/xy_dim.h
+    include/xy_dim.hpp
 
-    ./include/shape.h
+    include/shape.hpp
 
-    ./include/square.h
+    include/square.hpp
     ./src/square.cpp
 
-    ./include/rectangle.h
+    include/rectangle.hpp
     ./src/rectangle.cpp
 
-    ./include/triangle.h
+    include/triangle.hpp
     ./src/triangle.cpp
 )
 

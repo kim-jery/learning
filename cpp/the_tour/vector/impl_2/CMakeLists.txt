@@ -1,6 +1,6 @@
 add_library(
     vector_impl_2_lib
-    ./include/vector.h
+    include/vector.hpp
     ./src/vector.cpp
 )
 

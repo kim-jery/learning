@@ -1,5 +1,5 @@
 #include <string>
-#include "./include/array.h"
+#include "./include/array.hpp"
 #include <iostream>
 #include <algorithm>
 #include <string_view>
