@@ -2,7 +2,6 @@
 #include <filesystem>
 #include <chrono>
 #include <vector>
-#include <tuple>
 
 namespace kjr::learning::filesystem {
 
@@ -73,4 +72,5 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char const* const argv[])
         std::cout << name << " took " << time << " to list\n";
     }
 
+    return 0;
 }
