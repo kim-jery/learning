@@ -1,5 +1,5 @@
-#ifndef THE_TOUR_CLASS_SHARED_HPP
-#define THE_TOUR_CLASS_SHARED_HPP
+#ifndef KJR_THE_TOUR_CLASS_SHARED_HPP
+#define KJR_THE_TOUR_CLASS_SHARED_HPP
 #pragma once
 
 #include <string>
@@ -37,4 +37,4 @@ public:
 
 }
 
-#endif //THE_TOUR_CLASS_SHARED_HPP
+#endif //KJR_THE_TOUR_CLASS_SHARED_HPP

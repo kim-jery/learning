@@ -1,5 +1,5 @@
-#ifndef THE_TOUR_VECTOR_HPP_IMPL_1
-#define THE_TOUR_VECTOR_HPP_IMPL_1
+#ifndef KJR_THE_TOUR_VECTOR_HPP_IMPL_1
+#define KJR_THE_TOUR_VECTOR_HPP_IMPL_1
 #pragma once
 
 #include <initializer_list>
@@ -49,4 +49,4 @@ void ask_for_inputs(vector&, int);
 
 }
 
-#endif //THE_TOUR_VECTOR_HPP_IMPL_1
+#endif //KJR_THE_TOUR_VECTOR_HPP_IMPL_1

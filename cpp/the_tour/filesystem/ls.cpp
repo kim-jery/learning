@@ -32,8 +32,9 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char const* const argv[])
     namespace kjr_fs = kjr::learning::filesystem;
     namespace chrono = std::chrono;
     using duration = chrono::duration<std::double_t, std::milli>;
+    using bench = std::pair<std::string_view, duration>;
 
-    std::vector<std::pair<std::string_view, duration>> results {};
+    std::vector<bench> results {};
     results.reserve(2);
     
     constexpr static auto show_dir_measure {
@@ -44,13 +45,19 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char const* const argv[])
                 }
             };
 
+            auto const print {
+                [](auto const& path) {
+                    std::cout << prefix_path(path) << fs::file_size(path) << "\t\t" << path << '\n';
+                }
+            };
+
             auto const start {chrono::high_resolution_clock::now()};
             for (auto const& path : iterator) {
-                std::cout << prefix_path(path) << fs::file_size(path) << "\t\t" << path << '\n';
+                print(path);
             }
             auto const end {chrono::high_resolution_clock::now()};
 
-            return std::pair {name, duration {end - start}};
+            return bench {name, duration {end - start}};
         }
     };
 

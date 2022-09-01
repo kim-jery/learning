@@ -1,5 +1,5 @@
-#ifndef THE_TOUR_RAII_HPP
-#define THE_TOUR_RAII_HPP
+#ifndef KJR_THE_TOUR_RAII_HPP
+#define KJR_THE_TOUR_RAII_HPP
 #pragma once
 
 #include <string_view>
@@ -29,4 +29,4 @@ public:
 
 }
 
-#endif //THE_TOUR_RAII_HPP
+#endif //KJR_THE_TOUR_RAII_HPP

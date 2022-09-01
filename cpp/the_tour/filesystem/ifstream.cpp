@@ -47,7 +47,8 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char const* const argv[])
     using kjr::learning::filesystem::file_get_contents;
     namespace chrono = std::chrono;
     using duration_bench = chrono::duration<std::double_t, std::milli>;
-    std::vector<std::pair<std::string_view, duration_bench>> benchs {};
+    using bench = std::pair<std::string_view, duration_bench>;
+    std::vector<bench> benchs {};
 
     fs::path const path {argv[1]};
 

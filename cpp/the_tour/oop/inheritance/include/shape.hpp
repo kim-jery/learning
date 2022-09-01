@@ -1,5 +1,5 @@
-#ifndef THE_TOUR_SHAPE_HPP
-#define THE_TOUR_SHAPE_HPP
+#ifndef KJR_THE_TOUR_SHAPE_HPP
+#define KJR_THE_TOUR_SHAPE_HPP
 #pragma once
 
 #include "./xy_dim.hpp"
@@ -28,4 +28,4 @@ public:
 
 }
 
-#endif //THE_TOUR_SHAPE_HPP
+#endif //KJR_THE_TOUR_SHAPE_HPP

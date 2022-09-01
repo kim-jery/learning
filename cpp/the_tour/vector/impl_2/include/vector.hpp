@@ -1,5 +1,5 @@
-#ifndef THE_TOUR_VECTOR_H_IMPL_2
-#define THE_TOUR_VECTOR_H_IMPL_2
+#ifndef KJR_THE_TOUR_VECTOR_H_IMPL_2
+#define KJR_THE_TOUR_VECTOR_H_IMPL_2
 #pragma once
 
 #include <type_traits>
@@ -165,4 +165,4 @@ private:
 }
 
 
-#endif //THE_TOUR_VECTOR_H_IMPL_2
+#endif //KJR_THE_TOUR_VECTOR_H_IMPL_2

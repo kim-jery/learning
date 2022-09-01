@@ -75,6 +75,8 @@ bool push_shape(std::vector<std::unique_ptr<shape>>& shapes, int choice, char dr
 
 int main()
 {
+    std::ios_base::sync_with_stdio(false);
+
     namespace inheritance = kjr::learning::oop::inheritance;
 
     int type {};

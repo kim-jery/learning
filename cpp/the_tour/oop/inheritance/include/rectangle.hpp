@@ -1,5 +1,5 @@
-#ifndef THE_TOUR_RECTANGLE_HPP
-#define THE_TOUR_RECTANGLE_HPP
+#ifndef KJR_THE_TOUR_RECTANGLE_HPP
+#define KJR_THE_TOUR_RECTANGLE_HPP
 #pragma once
 
 #include "./shape.hpp"
@@ -19,4 +19,4 @@ public:
 }
 
 
-#endif //THE_TOUR_RECTANGLE_HPP
+#endif //KJR_THE_TOUR_RECTANGLE_HPP
