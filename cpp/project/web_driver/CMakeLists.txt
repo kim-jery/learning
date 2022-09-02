@@ -14,13 +14,17 @@ include_directories(${Boost_INCLUDE_DIR})
 link_directories(${Boost_LIBRARY_DIR})
 
 add_library(driver STATIC
-    include/driver.hpp
-    include/utility.hpp
     include/profile.hpp
-    src/driver.cpp
-    src/utility.cpp
+    include/utility.hpp
     src/profile.cpp
+    src/utility.cpp
+)
+add_library(helpers STATIC
+    tests/helpers.hpp
+    tests/helpers.cpp
 )
 
 add_executable(web_driver main.cpp)
+add_executable(web_driver_test tests/main.cpp)
 target_link_libraries(web_driver driver ${Boost_LIBRARIES})
+target_link_libraries(web_driver_test driver helpers ${Boost_LIBRARIES})

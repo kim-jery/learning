@@ -16,5 +16,6 @@ BTW should never be used in a serious environment :) It is clearly NOT a full im
 - Boost
     - [Beast](https://www.boost.org/doc/libs/master/libs/beast/doc/html/index.html)
     - [Json](https://www.boost.org/doc/libs/master/libs/json/doc/html/index.html)
+    - [UUID](https://www.boost.org/doc/libs/master/libs/uuid/doc/index.html)
 
 ## How to use in One* line
