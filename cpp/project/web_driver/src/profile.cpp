@@ -1,26 +1,31 @@
 #include "../include/profile.hpp"
-#include <filesystem>
-#include <boost/lexical_cast.hpp>
-#include <boost/uuid/uuid.hpp>
-#include <boost/uuid/uuid_generators.hpp>
-#include <boost/uuid/uuid_io.hpp>
+#include "../include/utility.hpp"
+#include <boost/json.hpp>
 
 namespace kjr::learning::web_driver {
 
-namespace fs = std::filesystem;
-
-profile::profile(fs::path path):
-    m_origin_path {std::move(path)},
-    m_tmp_path {std::filesystem::temp_directory_path() / boost::lexical_cast<std::string>(boost::uuids::random_generator{}())}
+profile::profile(std::filesystem::path path):
+    m_original_path {std::move(path)},
+    m_tmp_path {std::filesystem::temp_directory_path() / generate_uuid()}
 {
-    fs::create_directory(m_tmp_path);
-    fs::copy(m_origin_path, m_tmp_path, fs::copy_options::recursive);
+    std::filesystem::copy(m_original_path, m_tmp_path, std::filesystem::copy_options::recursive);
 }
 
 profile::~profile()
 {
-    fs::remove_all(m_tmp_path);
+    std::filesystem::remove_all(m_tmp_path);
+}
+
+std::ostream& operator<<(std::ostream& os, profile const& profile)
+{
+    os << profile.m_tmp_path;
+
+    return os;
+}
+
+void tag_invoke(boost::json::value_from_tag, boost::json::value& json, profile const& profile)
+{
+    json = profile.m_tmp_path.string();
 }
 
 }
-

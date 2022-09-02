@@ -3,18 +3,10 @@
 #pragma once
 
 #include <string>
-#include <sstream>
 
 namespace kjr::learning::web_driver {
 
-template<class... Parts>
-std::string make_path(Parts&&... parts)
-{
-    std::stringstream ss {};
-    ((ss << std::forward<Parts>(parts)), ...);
-
-    return ss.str();
-}
+std::string generate_uuid();
 
 }
 
