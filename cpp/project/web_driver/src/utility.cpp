@@ -7,8 +7,8 @@ namespace kjr::learning::web_driver {
 
 std::string generate_uuid()
 {
-    static boost::uuids::random_generator generator {};
-    std::stringstream ss {};
+    static boost::uuids::random_generator generator{};
+    std::stringstream ss{};
     ss << generator();
 
     return ss.str();

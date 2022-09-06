@@ -4,9 +4,9 @@
 
 namespace kjr::learning::web_driver {
 
-profile::profile(std::filesystem::path path):
-    m_original_path {std::move(path)},
-    m_tmp_path {std::filesystem::temp_directory_path() / generate_uuid()}
+profile::profile(std::filesystem::path path) :
+m_original_path{ std::move(path) },
+m_tmp_path{ std::filesystem::temp_directory_path() / generate_uuid() }
 {
     std::filesystem::copy(m_original_path, m_tmp_path, std::filesystem::copy_options::recursive);
 }
