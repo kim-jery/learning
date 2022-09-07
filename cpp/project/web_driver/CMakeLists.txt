@@ -20,19 +20,17 @@ set(kjr_webdriver_src
     include/utility.hpp
     src/profile.cpp
     src/utility.cpp
-    ${Boost_LIBRARIES}
-    )
+)
 
 set(kjr_webdriver_test_src
-    ${kjr_webdriver_src}
     tests/helpers.hpp
     tests/helpers.cpp
-    )
+)
 
 add_library(driver STATIC ${kjr_webdriver_src})
 add_library(test STATIC ${kjr_webdriver_test_src})
 
 add_executable(web_driver main.cpp)
 add_executable(web_driver_test tests/main.cpp)
-target_link_libraries(web_driver driver)
-target_link_libraries(web_driver_test test)
+target_link_libraries(web_driver driver ${Boost_LIBRARIES})
+target_link_libraries(web_driver_test driver test ${Boost_LIBRARIES})

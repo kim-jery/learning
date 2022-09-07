@@ -1,6 +1,4 @@
 #include "../include/profile.hpp"
-#include "../include/utility.hpp"
-#include <boost/json.hpp>
 
 namespace kjr::learning::web_driver {
 
@@ -16,16 +14,9 @@ profile::~profile()
     std::filesystem::remove_all(m_tmp_path);
 }
 
-std::ostream& operator<<(std::ostream& os, profile const& profile)
+std::filesystem::path const& profile::path() const
 {
-    os << profile.m_tmp_path;
-
-    return os;
-}
-
-void tag_invoke(boost::json::value_from_tag, boost::json::value& json, profile const& profile)
-{
-    json = profile.m_tmp_path.string();
+    return m_tmp_path;
 }
 
 }

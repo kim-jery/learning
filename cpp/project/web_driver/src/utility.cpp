@@ -1,7 +1,8 @@
-#include "../include/utility.hpp"
 #include <sstream>
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/uuid/uuid_generators.hpp>
+
+#include "../include/utility.hpp"
 
 namespace kjr::learning::web_driver {
 

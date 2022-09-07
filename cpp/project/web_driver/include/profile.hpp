@@ -3,8 +3,10 @@
 #pragma once
 
 #include <filesystem>
-#include <boost/json.hpp>
 #include <optional>
+#include <string_view>
+
+#include "../include/utility.hpp"
 
 namespace kjr::learning::web_driver {
 
@@ -22,10 +24,7 @@ public:
     profile(profile&&) = delete;
     profile& operator=(profile const&) = delete;
     profile& operator=(profile&&) = delete;
-
-public:
-    friend std::ostream& operator<<(std::ostream&, profile const&);
-    friend void tag_invoke(boost::json::value_from_tag, boost::json::value&, profile const&);
+    [[nodiscard]] std::filesystem::path const& path() const;
 
 };
 
@@ -33,6 +32,10 @@ template<class Path>
 requires std::is_convertible_v<Path, std::filesystem::path>
 std::optional<profile> make_profile(Path&& path)
 {
+    if (!std::filesystem::exists(path)) {
+        throw std::runtime_error{ make_string("No valid directory fount at ", path) };
+    }
+
     return std::optional<profile>{ std::in_place, std::forward<Path>(path) };
 }
 

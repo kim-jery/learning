@@ -9,7 +9,12 @@
 #include <sstream>
 #include <filesystem>
 
+#include "../include/utility.hpp"
+
 namespace kjr::learning::web_driver::test {
+
+void assert_dir_exists(std::filesystem::path const&);
+void assert_dir_does_not_exist(std::filesystem::path const&);
 
 template<class T>
 concept Outputable = requires(T&& value) {
@@ -19,10 +24,7 @@ concept Outputable = requires(T&& value) {
 template<class... Parts>
 void throw_runtime_error(Parts&& ... parts)
 {
-    std::stringstream ss{};
-    ((ss << std::forward<Parts>(parts) << ' '), ...);
-
-    throw std::runtime_error{ ss.str() };
+    throw std::runtime_error{ make_string(std::forward<Parts>(parts)...) };
 }
 
 template<class T, class U>
@@ -34,24 +36,26 @@ void assert_not_equal(T&& lhs, U&& rhs)
 {
     if (std::forward<T>(lhs) == std::forward<U>(rhs)) {
         if constexpr (Outputable<T>) {
-            throw_runtime_error("LHS", lhs, "and RHS", rhs, "are equal");
+            throw_runtime_error("LHS ", lhs, " and RHS ", rhs, " are equal");
         } else {
             throw_runtime_error("LHS and RHS are equal");
         }
     }
 }
 
-void assert_dir_exists(std::filesystem::path const& path)
+template<typename Closure>
+void assert_exception_thrown(Closure&& closure, std::string const& exception_message = {})
 {
-    if (!std::filesystem::is_directory(path)) {
-        throw_runtime_error("Directory", path, "does not exist");
-    }
-}
-
-void assert_dir_does_not_exist(std::filesystem::path const& path)
-{
-    if (std::filesystem::is_directory(path)) {
-        throw_runtime_error("Directory", path, "exists");
+    try {
+        std::forward<Closure>(closure)();
+        throw_runtime_error("Exception MUST be thrown with message ", exception_message);
+    } catch (std::exception const& e) {
+        if (exception_message.empty()) {
+            return;
+        }
+        if (e.what() != exception_message) {
+            throw_runtime_error("Exception message ", exception_message, " does not correspond to the exception one ", e.what());
+        }
     }
 }
 
