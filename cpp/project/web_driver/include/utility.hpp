@@ -9,7 +9,7 @@ namespace kjr::learning::web_driver {
 std::string generate_uuid();
 
 template<bool Space = false, class... Parts>
-std::string make_string(Parts&&... parts)
+std::string make_string(Parts&& ... parts)
 {
     std::stringstream ss{};
     if constexpr (Space) {

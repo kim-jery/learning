@@ -19,9 +19,9 @@ class capabilities
 {
 
 protected:
-    std::filesystem::path m_binary {};
-    std::optional<profile> m_profile {};
-    std::vector<std::string> m_args {};
+    std::filesystem::path m_binary{};
+    std::optional<profile> m_profile{};
+    std::vector<std::string> m_args{};
 
 public:
     capabilities(std::filesystem::path&&, std::optional<profile>&&, std::initializer_list<std::string>);

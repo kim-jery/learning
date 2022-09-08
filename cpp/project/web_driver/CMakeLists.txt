@@ -22,12 +22,12 @@ set(kjr_webdriver_src
     src/profile.cpp
     src/utility.cpp
     src/capabilities.cpp
-)
+    )
 
 set(kjr_webdriver_test_src
     tests/helpers.hpp
     tests/helpers.cpp
-)
+    )
 
 add_library(web_driver_lib STATIC ${kjr_webdriver_src})
 add_library(test_lib STATIC ${kjr_webdriver_test_src})

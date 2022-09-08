@@ -2,7 +2,7 @@
 
 namespace kjr::learning::web_driver {
 
-profile::profile(std::filesystem::path path) :
+profile::profile(std::filesystem::path path):
 m_original_path{ std::move(path) },
 m_tmp_path{ std::filesystem::temp_directory_path() / generate_uuid() }
 {

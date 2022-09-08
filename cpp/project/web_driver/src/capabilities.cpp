@@ -1,5 +1,6 @@
-#include "../include/capabilities.hpp"
 #include <algorithm>
+
+#include "../include/capabilities.hpp"
 
 namespace kjr::learning::web_driver {
 
