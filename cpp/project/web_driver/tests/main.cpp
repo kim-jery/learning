@@ -67,15 +67,17 @@ void test_make_profile_when_directory_not_valid()
 
     test::assert_exception_thrown([&uuid]() -> void {
         wd::make_profile(uuid);
-    }, "No valid directory fount at " + uuid);
+    }, make_string<true>("No valid directory found at", uuid));
 }
 
 void test_make_string()
 {
-    try {
-        assert_not_equal("FooBar", make_string("Foo", "Bar"));
-    } catch (std::runtime_error const& e) {
-    }
+    assert_equal("FooBar ", make_string("Foo", "Bar"));
+}
+
+void test_make_string_with_spaces()
+{
+    assert_equal("Foo Bar", make_string<true>("Foo", "Bar"));
 }
 
 }
@@ -84,12 +86,13 @@ int main()
 {
     namespace test = kjr::learning::web_driver::test;
 
-    test::execute_test_suite<4>(
+    test::execute_test_suite<5>(
     {
     test::test_case{ "Generate UUID", test::test_generate_uuids },
     test::test_case{ "Profile generation", test::test_profile },
     test::test_case{ "Make profile exception", test::test_make_profile_when_directory_not_valid },
-    test::test_case{ "Make String", test::test_make_string }
+    test::test_case{ "Make String", test::test_make_string },
+    test::test_case{ "Make String with spaces", test::test_make_string_with_spaces }
     });
 
 }

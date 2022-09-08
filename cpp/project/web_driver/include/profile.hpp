@@ -21,9 +21,9 @@ public:
     explicit profile(std::filesystem::path);
     ~profile();
     profile(profile const&) = delete;
-    profile(profile&&) = delete;
+    profile(profile&&) = default;
     profile& operator=(profile const&) = delete;
-    profile& operator=(profile&&) = delete;
+    profile& operator=(profile&&) = default;
     [[nodiscard]] std::filesystem::path const& path() const;
 
 };
@@ -33,7 +33,7 @@ requires std::is_convertible_v<Path, std::filesystem::path>
 std::optional<profile> make_profile(Path&& path)
 {
     if (!std::filesystem::exists(path)) {
-        throw std::runtime_error{ make_string("No valid directory fount at ", path) };
+        throw std::runtime_error{ make_string<true>("No valid directory found at", path) };
     }
 
     return std::optional<profile>{ std::in_place, std::forward<Path>(path) };

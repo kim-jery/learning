@@ -8,11 +8,15 @@ namespace kjr::learning::web_driver {
 
 std::string generate_uuid();
 
-template<class... Parts>
+template<bool Space = false, class... Parts>
 std::string make_string(Parts&&... parts)
 {
     std::stringstream ss{};
-    ((ss << std::forward<Parts>(parts)), ...);
+    if constexpr (Space) {
+        ((ss << std::forward<Parts>(parts) << ' '), ...);
+    } else {
+        ((ss << std::forward<Parts>(parts)), ...);
+    }
 
     return ss.str();
 }
