@@ -6,6 +6,10 @@ profile::profile(std::filesystem::path path):
 m_original_path{ std::move(path) },
 m_tmp_path{ std::filesystem::temp_directory_path() / generate_uuid() }
 {
+    if (!std::filesystem::exists(m_original_path)) {
+        throw std::runtime_error{ make_string<true>("Directory at", m_original_path, "does not exist") };
+    }
+
     std::filesystem::copy(m_original_path, m_tmp_path, std::filesystem::copy_options::recursive);
 }
 

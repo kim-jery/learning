@@ -61,13 +61,11 @@ void test_profile()
     test::assert_dir_does_not_exist(dir_should_not_exist_anymore);
 }
 
-void test_make_profile_when_directory_not_valid()
+void test_profile_when_directory_is_not_valid()
 {
-    auto const uuid{ generate_uuid() };
-
-    test::assert_exception_thrown([&uuid]() -> void {
-        wd::make_profile(uuid);
-    }, make_string<true>("No valid directory found at", uuid));
+    assert_exception_thrown([]() -> void {
+        profile{ "foo/bar" };
+    }, {});
 }
 
 void test_make_string()
@@ -90,7 +88,7 @@ int main()
     {
     test::test_case{ "Generate UUID", test::test_generate_uuids },
     test::test_case{ "Profile generation", test::test_profile },
-    test::test_case{ "Make profile exception", test::test_make_profile_when_directory_not_valid },
+    test::test_case{ "Profile generation when directory invalid", test::test_profile_when_directory_is_not_valid },
     test::test_case{ "Make String", test::test_make_string },
     test::test_case{ "Make String with spaces", test::test_make_string_with_spaces }
     });

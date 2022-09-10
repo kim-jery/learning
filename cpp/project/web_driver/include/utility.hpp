@@ -21,7 +21,6 @@ std::string make_string(Parts&& ... parts)
     return ss.str();
 }
 
-
 }
 
 #endif //KJR_WEB_DRIVER_UTILITY_HPP

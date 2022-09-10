@@ -52,12 +52,12 @@ void assert_equal(T&& lhs, U&& rhs)
     try {
         assert_not_equal(std::forward<T>(lhs), std::forward<U>(rhs));
     } catch (std::runtime_error const& e) {
-        throw_runtime_error("NOT", e.what());
+        throw_runtime_error("!(NOT)", e.what());
     }
 }
 
 template<typename Closure>
-void assert_exception_thrown(Closure&& closure, std::string const& exception_message = {})
+void assert_exception_thrown(Closure&& closure, std::string&& exception_message = {})
 {
     try {
         std::forward<Closure>(closure)();

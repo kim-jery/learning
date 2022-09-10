@@ -3,7 +3,6 @@
 #pragma once
 
 #include <filesystem>
-#include <optional>
 #include <string_view>
 
 #include "../include/utility.hpp"
@@ -21,23 +20,12 @@ public:
     explicit profile(std::filesystem::path);
     ~profile();
     profile(profile const&) = delete;
-    profile(profile&&) = default;
+    profile(profile&&) = delete;
     profile& operator=(profile const&) = delete;
-    profile& operator=(profile&&) = default;
+    profile& operator=(profile&&) = delete;
     [[nodiscard]] std::filesystem::path const& path() const;
 
 };
-
-template<class Path>
-requires std::is_convertible_v<Path, std::filesystem::path>
-std::optional<profile> make_profile(Path&& path)
-{
-    if (!std::filesystem::exists(path)) {
-        throw std::runtime_error{ make_string<true>("No valid directory found at", path) };
-    }
-
-    return std::optional<profile>{ std::in_place, std::forward<Path>(path) };
-}
 
 }
 
