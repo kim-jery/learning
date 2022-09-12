@@ -24,13 +24,10 @@ public:
 public:
     capabilities(std::filesystem::path&&, std::initializer_list<std::string>);
     capabilities(std::filesystem::path&&, profile const&, std::initializer_list<std::string>);
-    capabilities(capabilities const&) = delete;
-    capabilities(capabilities&&) = delete;
-    capabilities& operator=(capabilities const&) = delete;
-    capabilities& operator=(capabilities&&) = delete;
+
 };
 
-class firefox_capabilities : public capabilities
+class firefox_capabilities final : public capabilities
 {
     using capabilities::capabilities;
 
@@ -47,7 +44,7 @@ public:
 
 };
 
-class msedge_capabilities : public capabilities
+class msedge_capabilities final : public capabilities
 {
     using capabilities::capabilities;
 

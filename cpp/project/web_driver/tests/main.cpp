@@ -4,18 +4,23 @@
 #include <array>
 #include <algorithm>
 #include <ranges>
+#include <boost/beast.hpp>
 
 #include "../include/utility.hpp"
 #include "test_env.hpp"
 #include "helpers.hpp"
 #include "../include/profile.hpp"
-
-namespace kjr::learning::web_driver::test {
+#include "../include/driver_process.hpp"
 
 namespace wd = kjr::learning::web_driver;
 namespace test = wd::test;
 namespace json = boost::json;
 namespace fs = std::filesystem;
+namespace beast = boost::beast;
+namespace asio = boost::asio;
+namespace http = beast::http;
+
+namespace kjr::learning::web_driver::test {
 
 using test_case = std::pair<std::string, std::function<void()>>;
 
@@ -56,6 +61,9 @@ void test_profile()
         wd::profile profile{ profile_path };
         test::assert_dir_exists(profile.path());
         dir_should_not_exist_anymore = profile.path();
+
+        auto const copy{ profile };
+        test::assert_equal(copy.path(), profile.path());
     }
 
     test::assert_dir_does_not_exist(dir_should_not_exist_anymore);
@@ -78,19 +86,47 @@ void test_make_string_with_spaces()
     assert_equal("Foo Bar", make_string<true>("Foo", "Bar"));
 }
 
+template<class Driver_Process_Factory_Closure>
+void test_driver_process_status(Driver_Process_Factory_Closure&& factory, std::pair<std::string, std::string> const& process_connect_info)
+{
+    auto const process{ std::forward<Driver_Process_Factory_Closure>(factory)() };
+    asio::io_context ioc{};
+    asio::ip::tcp::resolver resolver{ ioc };
+
+    beast::tcp_stream stream{ ioc };
+    stream.connect(resolver.resolve(process_connect_info.first, process_connect_info.second));
+    http::request<http::string_body> req{ http::verb::get, "/status", 11 };
+    req.set(http::field::host, wd::make_string(process_connect_info.first, ':', process_connect_info.second));
+    http::write(stream, req);
+    beast::flat_buffer buffer{};
+    http::response<http::string_body> res{};
+    http::read(stream, buffer, res);
+    auto const ready{ json::parse(res.body()).at("value").at("ready").as_bool() };
+    auto const driver_type{ typeid(process).name() };
+    (ready) ? std::cout << driver_type << " started and ready\n" : std::cout << driver_type << " started but not ready\n";
+}
+
 }
 
 int main()
 {
-    namespace test = kjr::learning::web_driver::test;
-
-    test::execute_test_suite<5>(
+    test::execute_test_suite<7>(
     {
     test::test_case{ "Generate UUID", test::test_generate_uuids },
     test::test_case{ "Profile generation", test::test_profile },
     test::test_case{ "Profile generation when directory invalid", test::test_profile_when_directory_is_not_valid },
     test::test_case{ "Make String", test::test_make_string },
-    test::test_case{ "Make String with spaces", test::test_make_string_with_spaces }
+    test::test_case{ "Make String with spaces", test::test_make_string_with_spaces },
+    test::test_case{ "Geckodriver process", []() -> void {
+        test::test_driver_process_status([]() -> auto {
+            return wd::geckodriver_process{ test::geckodriver_config.first, test::geckodriver_config.second };
+        }, test::geckodriver_config);
+    } },
+    test::test_case{ "Msedgedriver process", []() -> void {
+        test::test_driver_process_status([]() -> auto {
+            return wd::msedgedriver_process{ test::msedgedriver_config.second };
+        }, test::msedgedriver_config);
+    } }
     });
 
 }

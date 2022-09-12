@@ -5,8 +5,6 @@
 #include <filesystem>
 #include <string_view>
 
-#include "../include/utility.hpp"
-
 namespace kjr::learning::web_driver {
 
 class profile final
@@ -19,10 +17,10 @@ private:
 public:
     explicit profile(std::filesystem::path);
     ~profile();
-    profile(profile const&) = delete;
-    profile(profile&&) = delete;
+    profile(profile const&);
+    profile(profile&&) = default;
     profile& operator=(profile const&) = delete;
-    profile& operator=(profile&&) = delete;
+    profile& operator=(profile&&) = default;
     [[nodiscard]] std::filesystem::path const& path() const;
 
 };

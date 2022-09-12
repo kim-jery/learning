@@ -19,9 +19,13 @@ set(kjr_webdriver_src
     include/profile.hpp
     include/utility.hpp
     include/capabilities.hpp
+    include/driver_process.hpp
+    include/web_driver.hpp
     src/profile.cpp
     src/utility.cpp
     src/capabilities.cpp
+    src/driver_process.cpp
+    src/web_driver.cpp
     )
 
 set(kjr_webdriver_test_src
