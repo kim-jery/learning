@@ -2,15 +2,13 @@
 
 ## Intro
 
-Little implementation of a [web driver specification](https://www.w3.org/TR/webdriver/) using C++ and Boost library.
+Little implementation of the [web driver specification](https://www.w3.org/TR/webdriver/) using C++ and Boost library.
 
 Currently, is only tested with firefox (geckodriver) and the only purpose of this little project is to apply what's has
-been
-learned.
+been learned.
 
 BTW should never be used in a serious environment :) It is clearly NOT a full (serious ?) implementation of the
-WebDriver
-specification.
+web driver specification.
 
 - No error handling or event report
 - Most of responses from the web driver are ignored

@@ -15,28 +15,12 @@ find_package(Boost REQUIRED)
 include_directories(${Boost_INCLUDE_DIR})
 link_directories(${Boost_LIBRARY_DIR})
 
-set(kjr_webdriver_src
-    include/profile.hpp
-    include/utility.hpp
-    include/capabilities.hpp
-    include/driver_process.hpp
-    include/web_driver.hpp
-    src/profile.cpp
-    src/utility.cpp
-    src/capabilities.cpp
-    src/driver_process.cpp
-    src/web_driver.cpp
-    )
+set(web_driver_include include/utility.hpp include/profile.hpp include/capabilities.hpp include/http_client.hpp include/web_driver.hpp)
+set(web_driver_src src/utility.cpp src/profile.cpp src/capabilities.cpp src/http_client.cpp src/web_driver.cpp)
 
-set(kjr_webdriver_test_src
-    tests/helpers.hpp
-    tests/helpers.cpp
-    )
-
-add_library(web_driver_lib STATIC ${kjr_webdriver_src})
-add_library(test_lib STATIC ${kjr_webdriver_test_src})
+add_library(web_driver_lib ${web_driver_include} ${web_driver_src})
 
 add_executable(driver main.cpp)
-add_executable(web_driver_test tests/main.cpp)
-target_link_libraries(driver web_driver_lib ${Boost_LIBRARIES})
-target_link_libraries(web_driver_test web_driver_lib test_lib ${Boost_LIBRARIES})
+add_executable(test tests/main.cpp tests/test_env.hpp)
+target_link_libraries(driver ${Boost_LIBRARIES} web_driver_lib)
+target_link_libraries(test ${Boost_LIBRAIRIES} web_driver_lib)

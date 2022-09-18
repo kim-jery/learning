@@ -3,7 +3,6 @@
 #pragma once
 
 #include <filesystem>
-#include <string_view>
 
 namespace kjr::learning::web_driver {
 
@@ -11,18 +10,19 @@ class profile final
 {
 
 private:
-    std::filesystem::path m_original_path{};
-    std::filesystem::path m_tmp_path{};
+    std::filesystem::path m_origin_path{};
+    std::filesystem::path m_path{};
+    bool m_moved{ false };
 
 public:
-    explicit profile(std::filesystem::path);
+    profile() = default;
+    explicit profile(std::filesystem::path&&);
     ~profile();
     profile(profile const&);
-    profile(profile&&) = default;
+    profile(profile&&) noexcept;
     profile& operator=(profile const&) = delete;
-    profile& operator=(profile&&) = default;
+    profile& operator=(profile&&) noexcept;
     [[nodiscard]] std::filesystem::path const& path() const;
-
 };
 
 }

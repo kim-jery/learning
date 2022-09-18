@@ -2,84 +2,35 @@
 #define KJR_WEB_DRIVER_CAPABILITIES_HPP
 #pragma once
 
-#include <string>
-#include <vector>
-#include <initializer_list>
-#include <iostream>
-#include <boost/json.hpp>
 #include <filesystem>
-
+#include <vector>
+#include <string>
+#include <initializer_list>
 #include "profile.hpp"
+#include <boost/asio.hpp>
+#include <boost/process.hpp>
+#include <boost/json.hpp>
 
 namespace kjr::learning::web_driver {
 class profile;
 
-class capabilities
+class firefox_capabilities
 {
 
-public:
-    std::filesystem::path m_binary{};
-    std::vector<std::string> m_args{};
+private:
+    std::filesystem::path m_binary {};
+    std::vector<std::string> m_args {};
+    profile m_profile {};
+    boost::asio::io_service m_ios {};
+    boost::process::child m_process {};
 
 public:
-    capabilities(std::filesystem::path&&, std::initializer_list<std::string>);
-    capabilities(std::filesystem::path&&, profile const&, std::initializer_list<std::string>);
+    firefox_capabilities(std::string&&, std::initializer_list<std::string>);
+    firefox_capabilities(std::string&&, std::filesystem::path&&, std::initializer_list<std::string>);
+    void set_profile(profile&&);
+    friend void tag_invoke(boost::json::value_from_tag, boost::json::value&, firefox_capabilities const&);
 
 };
-
-class firefox_capabilities final : public capabilities
-{
-    using capabilities::capabilities;
-
-public:
-    [[nodiscard]] constexpr static std::string get_options_identifier()
-    {
-        return "moz:firefoxOptions";
-    }
-
-    [[nodiscard]] constexpr static std::string get_browser_name()
-    {
-        return "firefox";
-    }
-
-};
-
-class msedge_capabilities final : public capabilities
-{
-    using capabilities::capabilities;
-
-public:
-    [[nodiscard]] constexpr static std::string get_options_identifier()
-    {
-        return "ms:edgeOptions";
-    }
-
-    [[nodiscard]] constexpr static std::string get_browser_name()
-    {
-        return "msedge";
-    }
-
-};
-
-template<class T>
-concept Webdriver_Capabilities = requires() {
-    std::is_base_of_v<capabilities, T>;
-    { T::get_options_identifier() } -> std::same_as<std::string>;
-    { T::get_browser_name() } -> std::same_as<std::string>;
-};
-
-template<Webdriver_Capabilities Capabilities>
-void tag_invoke(boost::json::value_from_tag, boost::json::value& json, Capabilities const& capabilities)
-{
-    json = { { "capabilities", { { "firstMatch", { {
-                                                   { "browserName", Capabilities::get_browser_name() },
-                                                   { Capabilities::get_options_identifier(), { { "binary", capabilities.m_binary.string() },
-                                                                                               { "args", capabilities.m_args }
-                                                   } }
-                                                   } } }
-    } }
-    };
-}
 
 }
 

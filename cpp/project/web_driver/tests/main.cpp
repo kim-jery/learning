@@ -1,132 +1,128 @@
-#include <boost/json.hpp>
-#include <filesystem>
-#include <utility>
+#include <iostream>
+#include <exception>
 #include <array>
+#include <functional>
 #include <algorithm>
-#include <ranges>
-#include <boost/beast.hpp>
-
+#include <tuple>
 #include "../include/utility.hpp"
-#include "test_env.hpp"
-#include "helpers.hpp"
 #include "../include/profile.hpp"
-#include "../include/driver_process.hpp"
+#include "../include/capabilities.hpp"
+#include "../include/http_client.hpp"
+#include "test_env.hpp"
+
+namespace kjr::learning::test::web_driver {
 
 namespace wd = kjr::learning::web_driver;
-namespace test = wd::test;
-namespace json = boost::json;
-namespace fs = std::filesystem;
-namespace beast = boost::beast;
-namespace asio = boost::asio;
-namespace http = beast::http;
-
-namespace kjr::learning::web_driver::test {
-
 using test_case = std::pair<std::string, std::function<void()>>;
 
 template<std::size_t Size>
-void execute_test_suite(std::array<test_case, Size>&& suite)
+using test_suite = std::array<test_case, Size>;
+
+test_case test_make_string()
 {
-    constexpr static auto perform_test{ [](test_case const& test_case) -> void {
-        auto const& [name, test] = test_case;
-        try {
-            test();
-            std::cout << "Test " << name << " passed\n";
-        } catch (std::exception const& e) {
-            std::cout << "Test " << name << " did not pass\nException message : " << e.what() << '\n';
+    return { __func__, []() -> void {
+        {
+            auto const string{ wd::make_string("foo", "bar") };
+            if (string != "foobar") {
+                throw std::runtime_error{ wd::make_string<' '>(string, "does not match foobar") };
+            }
         }
-
-        std::cout << "__________________________________\n";
+        {
+            auto const string{ wd::make_string<':'>("foo", "bar") };
+            if (string != "foo:bar") {
+                throw std::runtime_error{ wd::make_string<' '>(string, "does no match foo:bar") };
+            }
+        }
     } };
-
-    std::for_each(std::cbegin(suite), std::cend(suite), perform_test);
 }
 
-void test_generate_uuids()
+test_case test_generate_uuids()
 {
-    auto previous{ wd::generate_uuid() };
-
-    for (std::size_t i{ 0 }; i < 100; ++i) {
-        auto const current{ wd::generate_uuid() };
-        test::assert_not_equal(previous, current);
-        previous = current;
-    }
+    return { __func__, []() -> void {
+        auto previous{ wd::generate_uuid() };
+        for (std::size_t i{ 0 }; i < 100; ++i) {
+            auto const current{ wd::generate_uuid() };
+            if (current == previous) {
+                throw std::runtime_error{ wd::make_string<' '>("uuid", current, previous, "matches") };
+            }
+            previous = current;
+        }
+    } };
 }
 
-void test_profile()
+test_case test_profile_generation()
 {
-    fs::path dir_should_not_exist_anymore{};
+    return { __func__, []() -> void {
+        {
 
-    {
-        wd::profile profile{ profile_path };
-        test::assert_dir_exists(profile.path());
-        dir_should_not_exist_anymore = profile.path();
+            std::filesystem::path profile_dir_which_must_be_removed{};
+            {
+                wd::profile profile{ test::web_driver::profile_dir };
+                auto const profile_move{ std::move(profile) };
+                if (!std::filesystem::exists(profile_move.path())) {
+                    throw std::runtime_error{ wd::make_string<' '>("Temp profile", profile_move.path(), "must exist") };
+                }
+                profile_dir_which_must_be_removed = profile_move.path();
+            }
 
-        auto const copy{ profile };
-        test::assert_equal(copy.path(), profile.path());
-    }
-
-    test::assert_dir_does_not_exist(dir_should_not_exist_anymore);
+            if (std::filesystem::exists(profile_dir_which_must_be_removed)) {
+                throw std::runtime_error{ wd::make_string<' '>("Temp profile", profile_dir_which_must_be_removed, "must not exist") };
+            }
+        }
+        {
+            wd::profile profile{};
+            {
+                wd::profile profile_to_move{ test::web_driver::profile_dir };
+                profile = std::move(profile_to_move);
+            }
+            if (!std::filesystem::exists(profile.path())) {
+                throw std::runtime_error{
+                wd::make_string<' '>("Profile at", profile.path(), " life must be extended outside of the scope of the original profiles")
+                };
+            }
+        }
+    } };
 }
 
-void test_profile_when_directory_is_not_valid()
+test_case test_firefox_capabilities_http_client()
 {
-    assert_exception_thrown([]() -> void {
-        profile{ "foo/bar" };
-    }, {});
+    return {__func__, []() -> void {
+        wd::firefox_capabilities capabilities {"4444", test::web_driver::firefox_binary, {}};
+        wd::http_client client {};
+        auto session {wd::make_http_session(client, "127.0.0.1", "4444")};
+        session.send({wd::http::verb::get, "/status", 11});
+    }};
 }
 
-void test_make_string()
+template<std::size_t Size>
+void execute_test_suite(test_suite<Size> const& suite)
 {
-    assert_equal("FooBar ", make_string("Foo", "Bar"));
-}
-
-void test_make_string_with_spaces()
-{
-    assert_equal("Foo Bar", make_string<true>("Foo", "Bar"));
-}
-
-template<class Driver_Process_Factory_Closure>
-void test_driver_process_status(Driver_Process_Factory_Closure&& factory, std::pair<std::string, std::string> const& process_connect_info)
-{
-    auto const process{ std::forward<Driver_Process_Factory_Closure>(factory)() };
-    asio::io_context ioc{};
-    asio::ip::tcp::resolver resolver{ ioc };
-
-    beast::tcp_stream stream{ ioc };
-    stream.connect(resolver.resolve(process_connect_info.first, process_connect_info.second));
-    http::request<http::string_body> req{ http::verb::get, "/status", 11 };
-    req.set(http::field::host, wd::make_string(process_connect_info.first, ':', process_connect_info.second));
-    http::write(stream, req);
-    beast::flat_buffer buffer{};
-    http::response<http::string_body> res{};
-    http::read(stream, buffer, res);
-    auto const ready{ json::parse(res.body()).at("value").at("ready").as_bool() };
-    auto const driver_type{ typeid(process).name() };
-    (ready) ? std::cout << driver_type << " started and ready\n" : std::cout << driver_type << " started but not ready\n";
+    std::for_each(std::cbegin(suite), std::cend(suite), [](auto const& test) -> void {
+        auto const& [name, callable] = test;
+        try {
+            callable();
+            std::cout << name << " passed\n";
+        } catch (std::runtime_error const& e) {
+            std::cout << name << " failed. Exception message :\n";
+            std::cout << e.what();
+        }
+    });
 }
 
 }
 
 int main()
 {
-    test::execute_test_suite<7>(
-    {
-    test::test_case{ "Generate UUID", test::test_generate_uuids },
-    test::test_case{ "Profile generation", test::test_profile },
-    test::test_case{ "Profile generation when directory invalid", test::test_profile_when_directory_is_not_valid },
-    test::test_case{ "Make String", test::test_make_string },
-    test::test_case{ "Make String with spaces", test::test_make_string_with_spaces },
-    test::test_case{ "Geckodriver process", []() -> void {
-        test::test_driver_process_status([]() -> auto {
-            return wd::geckodriver_process{ test::geckodriver_config.first, test::geckodriver_config.second };
-        }, test::geckodriver_config);
-    } },
-    test::test_case{ "Msedgedriver process", []() -> void {
-        test::test_driver_process_status([]() -> auto {
-            return wd::msedgedriver_process{ test::msedgedriver_config.second };
-        }, test::msedgedriver_config);
-    } }
-    });
+    namespace test = kjr::learning::test::web_driver;
 
+    std::array suite{
+    test::test_make_string(),
+    test::test_generate_uuids(),
+    test::test_profile_generation(),
+    test::test_firefox_capabilities_http_client()
+    };
+
+    test::execute_test_suite(suite);
+
+    return 0;
 }

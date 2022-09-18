@@ -2,88 +2,88 @@
 #define KJR_WEB_DRIVER_WEB_DRIVER_HPP
 #pragma once
 
-#include <memory>
-#include <boost/beast.hpp>
-#include <boost/asio.hpp>
-#include <functional>
-#include <boost/json.hpp>
-
-#include "driver_process.hpp"
+#include "capabilities.hpp"
+#include "http_client.hpp"
+#include "utility.hpp"
+#include <string>
 
 namespace kjr::learning::web_driver {
+class firefox_capabilities;
 
-namespace http = boost::beast::http;
+class http_session;
 
-using request = http::request<http::string_body>;
-using response = http::response<http::string_body>;
+class element;
 
-template<Driver_Process T>
-class web_driver
+class web_driver final
 {
 
+public:
+    enum class navigation
+    {
+        back,
+        forward,
+        refresh
+    };
+
 private:
-    boost::beast::tcp_stream m_stream;
-    std::function<void(http::request<http::string_body>&)> m_request_decorator;
-    T m_process;
+    http_session m_http_session;
+    std::string m_session_id{};
 
 public:
-    template<class... Process_Args>
-    web_driver(boost::asio::ip::tcp::resolver& resolver, boost::asio::io_context& ioc, Process_Args&& ... args);
+    web_driver(http_session&&, firefox_capabilities const&);
+    web_driver(web_driver const&) = delete;
+    web_driver(web_driver&&) = delete;
+    web_driver& operator=(web_driver const&) = delete;
+    web_driver& operator=(web_driver&&) = delete;
+    ~web_driver();
+    void get(std::string&&);
+    std::string current();
+    std::string title();
+    std::string source();
     bool is_ready();
+    void back();
+    void forward();
+    void refresh();
+    void new_tab();
+    void switch_tab(std::string&&);
+    element find(std::string&&);
 
-private:
-    template<std::same_as<request> Request>
-    response send_request(Request&&);
+    template<navigation Direction>
+    inline void navigate()
+    {
+        constexpr static auto direction{ []() -> std::string_view {
+            using
+            enum navigation;
+            if constexpr (Direction == back) {
+                return "/back";
+            } else if constexpr (Direction == forward) {
+                return "/forward";
+            } else {
+                return "/refresh";
+            }
+        }() };
+
+        request req{ http::verb::post, make_string("/session/", m_session_id, direction), 11 };
+        req.body() = "{}";
+        m_http_session.send(std::move(req));
+    }
 
 };
 
-template<Driver_Process T>
-template<class... Process_Args>
-web_driver<T>::web_driver(boost::asio::ip::tcp::resolver& resolver, boost::asio::io_context& ioc, Process_Args&& ... args):
-m_stream{ ioc },
-m_request_decorator{ [&](request& req) {
-    if constexpr (sizeof...(Process_Args) == 1) {
-        req.set(http::field::host, make_string("127.0.0.1:", std::forward<Process_Args>(args)...));
-    } else {
-        std::stringstream ss{};
-        ((ss << std::forward<Process_Args>(args) << ':'), ...);
-        auto host{ ss.str() };
-        host.pop_back();
-
-        req.set(http::field::host, host);
-    }
-} },
-m_process{ T{ std::forward<Process_Args>(args)... } }
+class element final
 {
-    if constexpr (sizeof...(Process_Args) == 1) {
-        m_stream.connect(resolver.resolve("127.0.0.1", std::forward<Process_Args>(args)...));
-    } else {
-        m_stream.connect(resolver.resolve(std::forward<Process_Args>(args)...));
-    }
-}
 
-template<Driver_Process T>
-bool web_driver<T>::is_ready()
-{
-    return boost::json::parse(send_request(request{ http::verb::get, "/status", 11 }).body()).at("value").at("ready").as_bool();
-}
+private:
+    http_session& m_session;
+    std::string_view m_session_id{};
+    std::string m_id{};
 
-template<Driver_Process T>
-template<std::same_as<request> Request>
-response web_driver<T>::send_request(Request&& request)
-{
-    if (std::forward<Request>(request).method() == http::verb::post) {
-        std::forward<Request>(request).prepare_payload();
-    }
-    m_request_decorator(request);
-    http::write(m_stream, std::forward<Request>(request));
+public:
+    element(http_session&, std::string_view, std::string&&);
+    [[nodiscard]] std::string name() const;
+    [[nodiscard]] std::string text() const;
 
-    response response{};
-    boost::beast::flat_buffer buffer{};
-    http::read(m_stream, buffer, response);
-
-    return response;
-}
+};
 
 }
 
