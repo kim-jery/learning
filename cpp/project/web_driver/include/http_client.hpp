@@ -7,6 +7,7 @@
 #include <boost/json.hpp>
 #include <vector>
 #include <functional>
+#include "utility.hpp"
 
 namespace kjr::learning::web_driver {
 
