@@ -52,8 +52,7 @@ public:
     inline void navigate()
     {
         constexpr static auto direction{ []() -> std::string_view {
-            using
-            enum navigation;
+            using enum navigation;
             if constexpr (Direction == back) {
                 return "/back";
             } else if constexpr (Direction == forward) {
