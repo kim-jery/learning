@@ -82,6 +82,7 @@ public:
     element(http_session&, std::string_view, std::string&&);
     [[nodiscard]] std::string name() const;
     [[nodiscard]] std::string text() const;
+    void click() const;
 
 };
 

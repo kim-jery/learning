@@ -133,4 +133,14 @@ std::string element::text() const
     }()).body()).at("value").as_string() };
 }
 
+void element::click() const
+{
+    m_session.send([this]() -> request {
+        request req {http::verb::post, make_string("/session/", m_session_id, "/element/", m_id, "/click"), 11};
+        req.body() = "{}";
+
+        return req;
+    }());
+}
+
 }
